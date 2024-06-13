@@ -14,7 +14,7 @@ const io = require('socket.io')(server, {
     },
 });
 
-const localServerSocket = socketIO('http://192.168.21.232:8001');
+const localServerSocket = socketIO('http://192.168.21.232:4005');
 
 io.on('connection', (socket) => {
   console.log('Client connected');
