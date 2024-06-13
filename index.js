@@ -21,9 +21,11 @@ io.on('connection', (socket) => {
 
   socket.on('print', (data) => {
     console.log('Print request received:', data);
-
-
-    localServerSocket.emit('print', data);
+    try {
+        localServerSocket.emit('print', data);     
+    } catch (error) {
+        console.log("Error Occur: "+error);
+    } 
   });
 
   socket.on('disconnect', () => {
