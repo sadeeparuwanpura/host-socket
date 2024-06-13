@@ -14,7 +14,7 @@ const io = require('socket.io')(server, {
     },
 });
 
-const localServerSocket = socketIO('http://192.168.21.232:4005');
+//const localServerSocket = socketIO('http://192.168.21.232:4005');
 
 io.on('connection', (socket) => {
   console.log('Client connected');
@@ -22,7 +22,9 @@ io.on('connection', (socket) => {
   socket.on('print', (data) => {
     console.log('Print request received:', data);
     try {
-        localServerSocket.emit('print', data);     
+        //localServerSocket.emit('print', data); 
+        socket.emit('print', data); 
+
     } catch (error) {
         console.log("Error Occur: "+error);
     } 
