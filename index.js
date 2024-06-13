@@ -41,6 +41,47 @@
 // });
 
 
+// const express = require('express');
+// const http = require('http');
+// const socketIO = require('socket.io');
+// const ios = require('socket.io-client'); 
+
+// const app = express();
+// const server = http.createServer(app);
+// const io = socketIO(server, {
+//   cors: {
+//     origin: 'http://localhost:3000',
+//     methods: ['GET', 'POST'],
+//     allowedHeaders: ['Content-Type'],
+//     credentials: true,
+//   },
+// });
+
+// io.on('connection', (socket) => {
+//   console.log('Client connected');
+
+//   socket.on('print', (data) => {
+//     console.log('Print request received:', data);
+//     try {
+//       const electronAppSocket = ios('ws://localhost:8000');
+//       electronAppSocket.emit('print', data);
+//       electronAppSocket.disconnect();
+//     } catch (error) {
+//       console.log('Error:', error);
+//     }
+//   });
+
+//   socket.on('disconnect', () => {
+//     console.log('Client disconnected');
+//   });
+// });
+
+// const port = process.env.PORT || 3001;
+// server.listen(port, () => {
+//   console.log(`Hosted Node.js server listening on port ${port}`);
+// });
+
+
 const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
@@ -49,7 +90,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: '*', // Allow connections from any origin
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
     credentials: true,
@@ -57,25 +98,23 @@ const io = socketIO(server, {
 });
 
 io.on('connection', (socket) => {
-  console.log('Client connected');
+  console.log('Client connected to hosted server');
 
   socket.on('print', (data) => {
     console.log('Print request received:', data);
     try {
-      const electronAppSocket = socketIO.connect('http://192.168.21.232:8000');
-      electronAppSocket.emit('print', data);
-      electronAppSocket.disconnect();
+      socket.broadcast.emit('print', data);
     } catch (error) {
       console.log('Error:', error);
     }
   });
 
   socket.on('disconnect', () => {
-    console.log('Client disconnected');
+    console.log('Client disconnected from hosted server');
   });
 });
 
 const port = process.env.PORT || 3001;
 server.listen(port, () => {
-  console.log(`Hosted Node.js server listening on port ${port}`);
+  console.log(`Hosted server listening on port ${port}`);
 });
