@@ -27,7 +27,7 @@ io.on('connection', (socket) => {
 
   socket.on('printResponse', (data) => {
     console.log('Print response received from Electron app:', data);
-    socket.emit('printResponse', data);
+    socket.broadcast.emit('printResponse', data);
   });
 
   socket.on('disconnect', () => {
